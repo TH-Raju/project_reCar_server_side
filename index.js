@@ -16,6 +16,16 @@ app.use(express.json());
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ddpko0x.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
+function verifyJWT(req, res, next) {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).send('unauthorize access')
+    }
+
+    const token = authHeader.split(' ')[1];
+}
+
+
 async function run() {
     try {
         const categoriyCollection = client.db('resaleHanding').collection('categoriy');
@@ -35,7 +45,7 @@ async function run() {
             res.send(result);
         })
 
-        app.get('/bookings', async (req, res) => {
+        app.get('/bookings', verifyJWT, async (req, res) => {
             const email = req.query.email;
             const query = { buyerEmail: email };
             const bookings = await bookingCollection.find(query).toArray();
