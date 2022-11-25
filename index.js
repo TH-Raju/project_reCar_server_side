@@ -56,6 +56,12 @@ async function run() {
             res.send(result);
         })
 
+        app.post('/categoriy', async (req, res) => {
+            const product = req.body;
+            const result = await categoriyCollection.insertOne(product);
+            res.send(result)
+        })
+
         app.get('/categoriyProduct', async (req, res) => {
             const query = {}
             const result = await categoriyCollection.find(query).project({ name: 1 }).toArray();
