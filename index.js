@@ -58,7 +58,14 @@ async function run() {
 
         app.post('/categoriy', async (req, res) => {
             const product = req.body;
-            const result = await categoriyCollection.insertOne(product);
+            const filter = { categorie: name }
+            const options = { upsert: true };
+            const updatedDoc = {
+                $push: {
+                    product: product
+                }
+            }
+            const result = await categoriyCollection.insertOne(filter, updatedDoc, options);
             res.send(result)
         })
 
@@ -101,6 +108,13 @@ async function run() {
             const users = await usersCollection.find(query).toArray();
             res.send(users);
         });
+
+        app.delete('/users/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) };
+            const result = await usersCollection.deleteOne(filter);
+            res.send(result);
+        })
 
         app.get('/users/admin/:email', async (req, res) => {
             const email = req.params.email;
