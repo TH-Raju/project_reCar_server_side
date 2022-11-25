@@ -47,12 +47,21 @@ async function run() {
             res.send(options);
         })
 
+
+
         app.get('/categoriy/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const result = await categoriyCollection.findOne(query);
             res.send(result);
         })
+
+        app.get('/categoriyProduct', async (req, res) => {
+            const query = {}
+            const result = await categoriyCollection.find(query).project({ name: 1 }).toArray();
+            res.send(result);
+        })
+
 
         app.get('/bookings', verifyJWT, async (req, res) => {
             const email = req.query.email;
