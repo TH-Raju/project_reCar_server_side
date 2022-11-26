@@ -47,6 +47,18 @@ async function run() {
             res.send(options);
         })
 
+        app.put('/categoriy', async (req, res) => {
+            const product = req.body;
+            const filter = { _id: ObjectId(product.categorie) }
+            const options = { upsert: true };
+            const updatedDoc = {
+                $push: {
+                    product: product
+                }
+            }
+            const result = await categoriyCollection.updateOne(filter, updatedDoc, options);
+            res.send(result);
+        })
 
 
         app.get('/categoriy/:id', async (req, res) => {
@@ -56,25 +68,13 @@ async function run() {
             res.send(result);
         })
 
-        app.post('/categoriy', async (req, res) => {
-            const product = req.body;
-            const filter = { categorie: name }
-            const options = { upsert: true };
-            const updatedDoc = {
-                $push: {
-                    product: product
-                }
-            }
-            const result = await categoriyCollection.insertOne(filter, updatedDoc, options);
-            res.send(result)
-        })
+
 
         app.get('/categoriyProduct', async (req, res) => {
             const query = {}
             const result = await categoriyCollection.find(query).project({ name: 1 }).toArray();
             res.send(result);
         })
-
 
         app.get('/bookings', verifyJWT, async (req, res) => {
             const email = req.query.email;
@@ -86,6 +86,7 @@ async function run() {
             const bookings = await bookingCollection.find(query).toArray();
             res.send(bookings);
         })
+
         app.delete('/bookings/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
@@ -98,6 +99,7 @@ async function run() {
             const result = await bookingCollection.insertOne(booking);
             res.send(result);
         })
+
         app.get('/jwt', async (req, res) => {
             const email = req.query.email;
             const query = { email: email }
