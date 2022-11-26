@@ -86,6 +86,12 @@ async function run() {
             const bookings = await bookingCollection.find(query).toArray();
             res.send(bookings);
         })
+        app.delete('/bookings/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await bookingCollection.deleteOne(query);
+            res.send(result);
+        })
 
         app.post('/bookings', async (req, res) => {
             const booking = req.body;
@@ -129,8 +135,6 @@ async function run() {
             const user = await usersCollection.findOne(query);
             res.send({ isSeller: user?.role === 'Seller' });
         })
-
-
 
         app.post('/users', async (req, res) => {
             const user = req.body;
