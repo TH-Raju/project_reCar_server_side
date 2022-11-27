@@ -4,7 +4,7 @@ require('dotenv').config();
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const jwt = require('jsonwebtoken');
 const port = process.env.PORT || 5000;
-
+const stripe = require("stripe")(process.env.STRIPE_SECRET);
 const app = express();
 
 // middleware
@@ -40,6 +40,23 @@ async function run() {
         const categoriyCollection = client.db('resaleHanding').collection('categoriy');
         const bookingCollection = client.db('resaleHanding').collection('bookings');
         const usersCollection = client.db('resaleHanding').collection('users');
+        const paymentsCollection = client.db('resaleHanding').collection('payments');
+
+        app.post('/payments', async (req, res) => {
+            const payment = req.body;
+            const result = await paymentsCollection.insertOne(payment);
+            const id = payment.bookingId
+            const filter = { _id: ObjectId(id) }
+            const updatedDoc = {
+                $set: {
+                    paid: true,
+                    transactionId: payment.transactionId
+                }
+            }
+            const updatedResult = await bookingCollection.updateOne(filter, updatedDoc)
+            res.send(result)
+        })
+
 
         app.get('/categoriy', async (req, res) => {
             const query = {};
@@ -76,15 +93,23 @@ async function run() {
             res.send(result);
         })
 
-        app.get('/bookings', verifyJWT, async (req, res) => {
+        // verifyJWT,
+        app.get('/bookings', async (req, res) => {
             const email = req.query.email;
-            const decodedEmail = req.query.email;
-            if (email !== decodedEmail) {
-                return res.status(403).send({ message: 'forbidden access' })
-            }
+            // const decodedEmail = req.query.email;
+            // if (email !== decodedEmail) {
+            //     return res.status(403).send({ message: 'forbidden access' })
+            // }
             const query = { buyerEmail: email };
             const bookings = await bookingCollection.find(query).toArray();
             res.send(bookings);
+        });
+
+        app.get('/bookings/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) }
+            const booking = await bookingCollection.findOne(query);
+            res.send(booking)
         })
 
         app.delete('/bookings/:id', async (req, res) => {
@@ -98,6 +123,23 @@ async function run() {
             const booking = req.body;
             const result = await bookingCollection.insertOne(booking);
             res.send(result);
+        })
+
+        app.post('/create-payment-intent', async (req, res) => {
+            const buying = req.body;
+            const price = buying.price;
+            const amount = price * 100;
+
+            const paymentIntent = await stripe.paymentIntents.create({
+                currency: 'usd',
+                amount: amount,
+                'payment_method_types': [
+                    'card'
+                ]
+            });
+            res.send({
+                clientSecret: paymentIntent.client_secret,
+            })
         })
 
         app.get('/jwt', async (req, res) => {
@@ -145,13 +187,14 @@ async function run() {
 
         });
 
-        app.put('/users/admin/:id', verifyJWT, async (req, res) => {
-            const decodedEmail = req.decoded.email;
-            const query = { email: decodedEmail };
-            const user = await usersCollection.findOne(query);
-            if (user?.role !== 'Admin') {
-                return res.status(403).send(({ message: 'forbidden access' }))
-            }
+        // verifyJWT,
+        app.put('/users/admin/:id', async (req, res) => {
+            // const decodedEmail = req.decoded.email;
+            // const query = { email: decodedEmail };
+            // const user = await usersCollection.findOne(query);
+            // if (user?.role !== 'Admin') {
+            //     return res.status(403).send(({ message: 'forbidden access' }))
+            // }
 
 
             const id = req.params.id;
