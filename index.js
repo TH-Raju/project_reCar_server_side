@@ -38,6 +38,7 @@ function verifyJWT(req, res, next) {
 async function run() {
     try {
         const categoriyCollection = client.db('resaleHanding').collection('categoriy');
+        const productCollection = client.db('resaleHanding').collection('product');
         const bookingCollection = client.db('resaleHanding').collection('bookings');
         const usersCollection = client.db('resaleHanding').collection('users');
         const paymentsCollection = client.db('resaleHanding').collection('payments');
@@ -64,6 +65,7 @@ async function run() {
             res.send(options);
         })
 
+
         app.put('/categoriy', async (req, res) => {
             const product = req.body;
             const filter = { _id: ObjectId(product.categorie) }
@@ -74,6 +76,24 @@ async function run() {
                 }
             }
             const result = await categoriyCollection.updateOne(filter, updatedDoc, options);
+            res.send(result);
+        })
+
+        app.post('/product', async (req, res) => {
+            const product = req.body;
+            const result = await productCollection.insertOne(product);
+            res.send(result);
+        })
+
+        app.get('/product', async (req, res) => {
+            const query = {};
+            const options = await productCollection.find(query).toArray();
+            res.send(options);
+        })
+        app.delete('/product/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await productCollection.deleteOne(query);
             res.send(result);
         })
 
