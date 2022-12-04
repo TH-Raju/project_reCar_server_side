@@ -114,12 +114,12 @@ async function run() {
         })
 
         // verifyJWT,
-        app.get('/bookings', verifyJWT, async (req, res) => {
+        app.get('/bookings', async (req, res) => {
             const email = req.query.email;
-            const decodedEmail = req.query.email;
-            if (email !== decodedEmail) {
-                return res.status(403).send({ message: 'forbidden access' })
-            }
+            // const decodedEmail = req.query.email;
+            // if (email !== decodedEmail) {
+            //     return res.status(403).send({ message: 'forbidden access' })
+            // }
             const query = { buyerEmail: email };
             const bookings = await bookingCollection.find(query).toArray();
             res.send(bookings);
