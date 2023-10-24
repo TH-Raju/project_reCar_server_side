@@ -15,7 +15,7 @@ import categoriyProductRoutes from "./routes/categoriyProduct.route"
 import productRoutes from "./routes/product.route"
 import bookingsRoutes from "./routes/bookings.route"
 import paymentIntentRoutes from "./routes/paymentIntent.route"
-
+import userJWTRoutes from "./routes/userJWT.route"
 // middleware
 app.use(cors());
 app.use(express.json());
@@ -35,6 +35,8 @@ app.use("/categoriyProduct", categoriyProductRoutes)
 app.use("/product", productRoutes)
 app.use("/bookings", bookingsRoutes)
 app.use("/create-payment-intent",paymentIntentRoutes)
+app.use("/jwt", userJWTRoutes)
+
 
 async function run() {
     try {
