@@ -10,11 +10,13 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET);
 const app = express();
 
 import paymentRoutes from "./routes/payment.route"
+import categoriyRoutes from "./routes/categoriy.route"
+import categoriyProductRoutes from "./routes/categoriyProduct.route"
+
 
 // middleware
 app.use(cors());
 app.use(express.json());
-
 
 
 // DB
@@ -26,6 +28,8 @@ verifyJWT();
 
 // Api Routes
 app.use("/payment", paymentRoutes)
+app.use("/categoriy", categoriyRoutes)
+app.use("/categoriyProduct", categoriyProductRoutes)
 
 
 async function run() {
