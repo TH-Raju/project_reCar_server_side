@@ -1,9 +1,11 @@
-import dbConnect from "../utils/dbConnect";
+const dbConnect = require("../utils/dbConnect");
+const ObjectId = require("mongodb");
+
 const bookingCollection = dbConnect()
   .db("resaleHanding")
   .collection("bookings");
 
-export async function getBookings(req, res) {
+async function getBookings(req, res) {
   const email = req.query.email;
   // const decodedEmail = req.query.email;
   // if (email !== decodedEmail) {
@@ -14,22 +16,29 @@ export async function getBookings(req, res) {
   res.send(bookings);
 }
 
-export async function getBookingsById(req, res) {
+async function getBookingsById(req, res) {
   const id = req.params.id;
   const query = { _id: ObjectId(id) };
   const booking = await bookingCollection.findOne(query);
   res.send(booking);
 }
 
-export async function postBooking(req, res) {
+async function postBooking(req, res) {
   const booking = req.body;
   const result = await bookingCollection.insertOne(booking);
   res.send(result);
 }
 
-export async function deleteBookingById(req, res) {
+async function deleteBookingById(req, res) {
   const id = req.params.id;
   const query = { _id: ObjectId(id) };
   const result = await bookingCollection.deleteOne(query);
   res.send(result);
 }
+
+module.exports = {
+  getBookings: getBookings,
+  getBookingsById: getBookingsById,
+  postBooking: postBooking,
+  deleteBookingById: deleteBookingById,
+};

@@ -1,21 +1,28 @@
-import dbConnect from "../utils/dbConnect";
+const dbConnect = require("../utils/dbConnect");
 const productCollection = dbConnect().db("resaleHanding").collection("product");
+const ObjectId = require("mongodb");
 
-export async function getProduct(req, res) {
+async function getProduct(req, res) {
   const query = {};
   const options = await productCollection.find(query).toArray();
   res.send(options);
 }
 
-export async function postProduct(req, res) {
+async function postProduct(req, res) {
   const product = req.body;
   const result = await productCollection.insertOne(product);
   res.send(result);
 }
 
-export async function deleteProduct(req, res) {
+async function deleteProduct(req, res) {
   const id = req.params.id;
   const query = { _id: ObjectId(id) };
   const result = await productCollection.deleteOne(query);
   res.send(result);
 }
+
+module.exports = {
+  getProduct: getProduct,
+  postProduct: postProduct,
+  deleteProduct: deleteProduct,
+};

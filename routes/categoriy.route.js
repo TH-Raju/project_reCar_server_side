@@ -1,13 +1,14 @@
-import { Router } from "express";
-import {
+const express = require("express");
+const router = express.Router();
+const {
   getCategoriy,
   getCategoriyById,
   putCategoriy,
-} from "../controllers/categoriy.controller";
-const router = Router();
+} = require("../controllers/categoriy.controller");
+
 
 router.get("/", getCategoriy);
 router.put("/", putCategoriy);
-router.get("/:id", getCategoriyById)
+router.get("/:id", getCategoriyById);
 
-export default router;
+module.exports = router;

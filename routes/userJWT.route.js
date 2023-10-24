@@ -1,7 +1,8 @@
-import { Router } from "express";
-import { jwt } from "../controllers/userJWT.controller";
-const router = Router();
+const express = require("express");
+const router = express.Router();
+const  jwt  = require("../controllers/userJWT.controller");
+
 
 router.get("/", jwt);
 
-export default router;
+module.exports = router;

@@ -1,8 +1,7 @@
-import { Router } from "express";
-import verifyJWT from "../utils/verifyJWT";
-import { payment } from "../controllers/payments.controller";
-const router = Router();
+const express = require("express");
+const router = express.Router();
+const payment = require("../controllers/payments.controller");
 
 router.post("/", payment);
 
-export default router;
+module.exports = router;

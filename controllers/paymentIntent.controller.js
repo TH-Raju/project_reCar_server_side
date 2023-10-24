@@ -1,6 +1,6 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET);
 
-export async function paymentIntent(req, res) {
+async function paymentIntent(req, res) {
   const buying = req.body;
   const price = buying.price;
   const amount = price * 100;
@@ -14,3 +14,5 @@ export async function paymentIntent(req, res) {
     clientSecret: paymentIntent.client_secret,
   });
 }
+
+module.exports = paymentIntent;
