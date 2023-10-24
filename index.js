@@ -12,7 +12,9 @@ const app = express();
 import paymentRoutes from "./routes/payment.route"
 import categoriyRoutes from "./routes/categoriy.route"
 import categoriyProductRoutes from "./routes/categoriyProduct.route"
-
+import productRoutes from "./routes/product.route"
+import bookingsRoutes from "./routes/bookings.route"
+import paymentIntentRoutes from "./routes/paymentIntent.route"
 
 // middleware
 app.use(cors());
@@ -30,7 +32,9 @@ verifyJWT();
 app.use("/payment", paymentRoutes)
 app.use("/categoriy", categoriyRoutes)
 app.use("/categoriyProduct", categoriyProductRoutes)
-
+app.use("/product", productRoutes)
+app.use("/bookings", bookingsRoutes)
+app.use("/create-payment-intent",paymentIntentRoutes)
 
 async function run() {
     try {
