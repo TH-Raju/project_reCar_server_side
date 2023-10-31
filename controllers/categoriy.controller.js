@@ -11,6 +11,12 @@ async function getCategoriy(req, res) {
   res.send(options);
 }
 
+async function postCategoriy(req, res) {
+  const categoriy = req.body;
+  const result = await categoriyCollection.insertOne(categoriy);
+  res.send(result);
+}
+
 async function putCategoriy(req, res) {
   const product = req.body;
   const filter = { _id: ObjectId(product.categorie) };
@@ -46,6 +52,7 @@ async function getCategoriyProduct(req, res) {
 
 module.exports = {
   getCategoriy: getCategoriy,
+  postCategoriy: postCategoriy,
   putCategoriy: putCategoriy,
   getCategoriyById: getCategoriyById,
   getCategoriyProduct: getCategoriyProduct,

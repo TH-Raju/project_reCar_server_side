@@ -4,10 +4,12 @@ const {
   getCategoriy,
   getCategoriyById,
   putCategoriy,
+  postCategoriy,
 } = require("../controllers/categoriy.controller");
 
 
 router.get("/", getCategoriy);
+router.post("/", postCategoriy);
 router.put("/", putCategoriy);
 router.get("/:id", getCategoriyById);
 
