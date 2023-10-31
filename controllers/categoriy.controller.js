@@ -1,5 +1,5 @@
 const dbConnect = require("../utils/dbConnect");
-const ObjectId = require("mongodb");
+const { ObjectId } = require("mongodb");
 
 const categoriyCollection = dbConnect()
   .db("resaleHanding")
@@ -36,8 +36,10 @@ async function putCategoriy(req, res) {
 
 async function getCategoriyById(req, res) {
   const id = req.params.id;
+  // console.log(id);
   const query = { _id: ObjectId(id) };
   const result = await categoriyCollection.findOne(query);
+  // console.log(result);
   res.send(result);
 }
 

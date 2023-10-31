@@ -1,5 +1,5 @@
 const dbConnect = require("../utils/dbConnect");
-const ObjectId = require("mongodb");
+const {ObjectId} = require("mongodb");
 
 const bookingCollection = dbConnect()
   .db("resaleHanding")

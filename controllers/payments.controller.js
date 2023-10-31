@@ -5,7 +5,7 @@ const paymentsCollection = dbConnect()
 const bookingCollection = dbConnect()
   .db("resaleHanding")
   .collection("bookings");
-const ObjectId = require("mongodb");
+const {ObjectId} = require("mongodb");
 
 async function payment(req, res) {
   const payment = req.body;

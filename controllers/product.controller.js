@@ -1,6 +1,6 @@
 const dbConnect = require("../utils/dbConnect");
 const productCollection = dbConnect().db("resaleHanding").collection("product");
-const ObjectId = require("mongodb");
+const {ObjectId} = require("mongodb");
 
 async function getProduct(req, res) {
   const query = {};

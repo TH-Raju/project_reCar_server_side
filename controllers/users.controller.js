@@ -1,6 +1,6 @@
 const dbConnect = require("../utils/dbConnect");
 const usersCollection = dbConnect().db("resaleHanding").collection("users");
-const ObjectId = require("mongodb");
+const { ObjectId } = require("mongodb");
 
 async function getUsers(req, res) {
   const query = {};
@@ -36,14 +36,17 @@ async function getSeller(req, res) {
 }
 
 async function putToAdmin(req, res) {
-  const decodedEmail = req.decoded.email;
-  const query = { email: decodedEmail };
-  const user = await usersCollection.findOne(query);
-  if (user?.role !== "Admin") {
-    return res.status(403).send({ message: "forbidden access" });
-  }
+  // // console.log(req.params.id);
+  // const decodedEmail = req.params.id;
+  // const query = { _id: ObjectId(decodedEmail) };
+  // const user = await usersCollection.findOne(query);
+  // console.log(user);
+  // if (user?.role !== "Admin") {
+  //   return res.status(403).send({ message: "forbidden access" });
+  // }
 
   const id = req.params.id;
+  // console.log(id);
   const filter = { _id: ObjectId(id) };
   const options = { upsert: true };
   const updatedDoc = {

@@ -1,5 +1,5 @@
 const dbConnect = require("../utils/dbConnect");
-const ObjectId = require("mongodb");
+const {ObjectId} = require("mongodb");
 const usersCollection = dbConnect().db("resaleHanding").collection("users");
 
 async function jwt(req, res) {
